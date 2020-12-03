@@ -65,7 +65,7 @@ if [ $RDBMS == "oracle" ]; then
     RESTART_HTTPD=1
 
 elif [ $RDBMS == "mysql5" ]; then
-    CON_MYSQL=$(docker $CONTAINER_RUNTIME_ARGS run -tmpfs /var/lib/mysql:rw,noexec,nosuid,size=1024m -d $CONTAINER_RUN_ARGS -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_ROOT_HOST=% docker.io/mysql/mysql-server:5.7)
+    CON_MYSQL=$(docker $CONTAINER_RUNTIME_ARGS run --tmpfs /var/lib/mysql:rw,noexec,nosuid,size=1024m -d $CONTAINER_RUN_ARGS -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_ROOT_HOST=% docker.io/mysql/mysql-server:5.7)
     docker $CONTAINER_RUNTIME_ARGS run -d $CONTAINER_RUN_ARGS docker.io/webcenter/activemq:latest
     docker $CONTAINER_RUNTIME_ARGS exec $CON_RUCIO sh -c 'echo 127.0.0.1 mysql5 activemq >> /etc/hosts'
 
@@ -85,7 +85,7 @@ elif [ $RDBMS == "mysql5" ]; then
     RESTART_HTTPD=1
 
 elif [ $RDBMS == "mysql8" ]; then
-    CON_MYSQL=$(docker $CONTAINER_RUNTIME_ARGS run -tmpfs /var/lib/mysql:rw,noexec,nosuid,size=1024m -d $CONTAINER_RUN_ARGS -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_ROOT_HOST=% docker.io/mysql/mysql-server:8.0 --default-authentication-plugin=mysql_native_password --character-set-server=latin1)
+    CON_MYSQL=$(docker $CONTAINER_RUNTIME_ARGS run --tmpfs /var/lib/mysql:rw,noexec,nosuid,size=1024m -d $CONTAINER_RUN_ARGS -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_ROOT_HOST=% docker.io/mysql/mysql-server:8.0 --default-authentication-plugin=mysql_native_password --character-set-server=latin1)
     docker $CONTAINER_RUNTIME_ARGS run -d $CONTAINER_RUN_ARGS docker.io/webcenter/activemq:latest
     docker $CONTAINER_RUNTIME_ARGS exec $CON_RUCIO sh -c 'echo 127.0.0.1 mysql8 activemq >> /etc/hosts'
 
@@ -105,7 +105,7 @@ elif [ $RDBMS == "mysql8" ]; then
     RESTART_HTTPD=1
 
 elif [ $RDBMS == "postgres9" ]; then
-    CON_POSTGRES=$(docker $CONTAINER_RUNTIME_ARGS run -d $CONTAINER_RUN_ARGS -e POSTGRES_PASSWORD=secret docker.io/postgres:9 -c 'max_connections=300' -c 'fsync=off' -c 'synchronous_commits=off' -c 'full_page_writes=off')
+    CON_POSTGRES=$(docker $CONTAINER_RUNTIME_ARGS run --tmpfs=/pgtmpfs:rw,noexec,nosuid,size=1024m -d $CONTAINER_RUN_ARGS -e PGDATA=/pgtmpfs -e POSTGRES_PASSWORD=secret docker.io/postgres:9 -c 'max_connections=300')
     docker $CONTAINER_RUNTIME_ARGS run -d $CONTAINER_RUN_ARGS docker.io/webcenter/activemq:latest
     docker $CONTAINER_RUNTIME_ARGS exec $CON_RUCIO sh -c 'echo 127.0.0.1 postgres9 activemq >> /etc/hosts'
 
@@ -125,7 +125,7 @@ elif [ $RDBMS == "postgres9" ]; then
     RESTART_HTTPD=1
 
 elif [ $RDBMS == "postgres12" ]; then
-    CON_POSTGRES=$(docker $CONTAINER_RUNTIME_ARGS run -d $CONTAINER_RUN_ARGS -e POSTGRES_PASSWORD=secret docker.io/postgres:12 -c 'max_connections=300' -c 'fsync=off' -c 'synchronous_commits=off' -c 'full_page_writes=off')
+    CON_POSTGRES=$(docker $CONTAINER_RUNTIME_ARGS run --tmpfs=/pgtmpfs:rw,noexec,nosuid,size=1024m -d $CONTAINER_RUN_ARGS -e PGDATA=/pgtmpfs -e POSTGRES_PASSWORD=secret docker.io/postgres:12 -c 'max_connections=300')
     docker $CONTAINER_RUNTIME_ARGS run -d $CONTAINER_RUN_ARGS docker.io/webcenter/activemq:latest
     docker $CONTAINER_RUNTIME_ARGS exec $CON_RUCIO sh -c 'echo 127.0.0.1 postgres12 activemq >> /etc/hosts'
 
